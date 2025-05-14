@@ -1,0 +1,85 @@
+-- === CREACIÓN DE TABLAS ===
+
+CREATE TABLE Nave (
+    ID_Nave INTEGER PRIMARY KEY,
+    Estado TEXT NOT NULL CHECK (Estado IN ('funcional', 'averiada'))
+);
+
+CREATE TABLE SuministroNave (
+    ID_SuministroNave INTEGER PRIMARY KEY,
+    ID_Nave INTEGER NOT NULL,
+    TipoSuministro TEXT NOT NULL CHECK (TipoSuministro IN ('oxígeno', 'energía', 'comida', 'chatarra')),
+    Cantidad INTEGER NOT NULL,
+    FOREIGN KEY (ID_Nave) REFERENCES Nave(ID_Nave)
+);
+
+CREATE TABLE Modulo (
+    ID_Modulo INTEGER PRIMARY KEY,
+    Nombre TEXT NOT NULL,
+    Estado TEXT NOT NULL CHECK (Estado IN ('funcional', 'dañado', 'destruido')),
+    ID_Nave INTEGER NOT NULL,
+    FOREIGN KEY (ID_Nave) REFERENCES Nave(ID_Nave)
+);
+
+CREATE TABLE Nivel (
+    ID_Nivel INTEGER PRIMARY KEY,
+    Nombre TEXT NOT NULL,
+    Descripcion TEXT,
+    ExperienciaRequerida INTEGER NOT NULL,
+    Estado TEXT NOT NULL CHECK (Estado IN ('desbloqueado', 'completado', 'bloqueado'))
+);
+
+CREATE TABLE Evento (
+    ID_Evento INTEGER PRIMARY KEY,
+    Tipo TEXT NOT NULL CHECK (Tipo IN ('fallo', 'sabotaje', 'etc.')),
+    Descripcion TEXT NOT NULL,
+    TiempoLimite INTEGER,
+    SuministroAfectado TEXT CHECK (SuministroAfectado IN ('oxígeno', 'energía', 'comida', 'chatarra')),
+    Impacto TEXT,
+    ID_Mision INTEGER
+);
+
+CREATE TABLE Recompensa (
+    ID_Recompensa INTEGER PRIMARY KEY,
+    Tipo TEXT NOT NULL CHECK (Tipo IN ('suministro', 'experiencia', 'desbloqueo')),
+    Contenido TEXT,
+    CantidadExperiencia INTEGER,
+    ID_EventoDesbloqueado INTEGER
+);
+
+CREATE TABLE Mision (
+    ID_Mision INTEGER PRIMARY KEY,
+    Nombre TEXT NOT NULL,
+    Descripcion TEXT,
+    Duracion INTEGER NOT NULL,
+    ID_Recompensa INTEGER NOT NULL,
+    Estado TEXT NOT NULL CHECK (Estado IN ('pendiente', 'activa', 'completada')),
+    FOREIGN KEY (ID_Recompensa) REFERENCES Recompensa(ID_Recompensa)
+);
+
+CREATE TABLE Tarea (
+    ID_Tarea INTEGER PRIMARY KEY,
+    Descripcion TEXT NOT NULL,
+    Duracion INTEGER NOT NULL,
+    Estado TEXT NOT NULL CHECK (Estado IN ('pendiente', 'en curso', 'completada')),
+    ID_Modulo INTEGER NOT NULL,
+    ID_Evento INTEGER,
+    ID_Mision INTEGER,
+    NivelNecesario INTEGER,
+    ID_Recompensa INTEGER,
+    FOREIGN KEY (ID_Modulo) REFERENCES Modulo(ID_Modulo),
+    FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento),
+    FOREIGN KEY (ID_Mision) REFERENCES Mision(ID_Mision),
+    FOREIGN KEY (NivelNecesario) REFERENCES Nivel(ID_Nivel),
+    FOREIGN KEY (ID_Recompensa) REFERENCES Recompensa(ID_Recompensa)
+);
+
+CREATE TABLE Tripulante (
+    ID_Tripulante INTEGER PRIMARY KEY,
+    Nombre TEXT NOT NULL,
+    Salud INTEGER NOT NULL CHECK (Salud BETWEEN 0 AND 100),
+    Hambre INTEGER NOT NULL CHECK (Hambre BETWEEN 0 AND 100),
+    ID_TareaActual INTEGER,
+    ExperienciaActual INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (ID_TareaActual) REFERENCES Tarea(ID_Tarea)
+);
