@@ -56,7 +56,14 @@ public class MainMenu : MonoBehaviour
 
 
     }
-  
+
+    public void Volver()
+    {
+        PanelMenu.SetActive(true) ;
+        PanelOpciones.SetActive(false) ;
+        
+    }
+
 
 }
 
