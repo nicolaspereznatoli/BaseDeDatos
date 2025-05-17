@@ -86,4 +86,12 @@ public class First_Person_Movement : MonoBehaviour
         transform.Rotate(0f, PlayerMouseInput.x * Sensetivity, 0f);
         PlayerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
+
+
+    public void SetSpeed(float nuevaVelocidad)
+    {
+        Speed = nuevaVelocidad;
+    }
+
+
 }
