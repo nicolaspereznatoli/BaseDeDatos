@@ -2,23 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; // Necesario para usar RawImage
+using TMPro;
 
 public class SimulateSleep : MonoBehaviour
 {
+
+    [Header("Cameras")]
     public Camera mainCamera;
     public Camera bedCamera;
+
+    [Header("Fade Settings")]
     public float fadeDuration = 1f;
     public Image fadeImage;
-    public Transform bedTransform; // Asigna aquí la Transform del objeto cama
-    public float proximityDistance = 2f; // Distancia máxima para considerar que está cerca de la cama
-    private bool isFading = false;
+
+    [Header("Bed Proximity")]
+    public Transform bedTransform;
+    public float proximityDistance = 2f;
+    public Transform playerTransform;
+
+    [Header("Sleep Cooldown Message")]
+    public TMP_Text sleepMessageText; // Para TextMeshPro
+    public float messageDisplayTime = 2f;
+
+    [Header("Energy Restoration")]
+    public CharacterEnergy energyScript; // Asigna el script CharacterEnergy aquí
+    public bool hasSlept { get; set; } // Nuevo flag para indicar que se ha dormido
+
+    public bool isFading = false;
+    public bool isFadingPublic => isFading; // Propiedad pública de solo lectura para isFading
     private Color fadeColor = Color.black;
     private bool isNearBed = false;
-    public Transform playerTransform; // Asigna aquí la Transform del jugador
+    private bool canSleepAgain = true;
+    private float sleepCooldown = 10f;
+
+    void Start()
+    {
+        // Ocultar el mensaje al inicio
+        if (sleepMessageText != null)
+        {
+            sleepMessageText.gameObject.SetActive(false);
+        }
+        hasSlept = false;
+        if (energyScript == null)
+        {
+            Debug.LogError("¡El script CharacterEnergy no está asignado a SimulateSleep!");
+        }
+    }
 
     void Update()
     {
-        // Comprobar la distancia al objeto cama
+        CheckProximityToBed();
+        HandleSleepInput();
+    }
+
+    void CheckProximityToBed()
+    {
         if (bedTransform != null && playerTransform != null)
         {
             float distanceToBed = Vector3.Distance(playerTransform.position, bedTransform.position);
@@ -26,21 +64,33 @@ public class SimulateSleep : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Bed Transform or Player Transform not assigned!");
-            isNearBed = false; // Si no están asignados, no se considera cerca
+            Debug.LogWarning("Bed Transform o Player Transform no asignados.");
+            isNearBed = false;
         }
+    }
 
-        if (isNearBed && (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q) || Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.Q)) && !isFading)
+    void HandleSleepInput()
+    {
+        if (isNearBed && (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Q) || Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.Q)))
         {
-            StartCoroutine(GoToSleep());
+            if (canSleepAgain)
+            {
+                StartCoroutine(GoToSleep());
+            }
+            else
+            {
+                ShowSleepMessage("Espera para poder dormir de nuevo.");
+            }
         }
     }
 
     IEnumerator GoToSleep()
     {
+        canSleepAgain = false;
         isFading = true;
+        hasSlept = false; // Resetear el flag al empezar a dormir
 
-        // Switch camera
+        // Cambiar cámara
         if (mainCamera != null && bedCamera != null)
         {
             mainCamera.gameObject.SetActive(false);
@@ -48,8 +98,9 @@ public class SimulateSleep : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Main Camera or Bed Camera not assigned in the Inspector!");
+            Debug.LogError("Cámaras no asignadas.");
             isFading = false;
+            canSleepAgain = true;
             yield break;
         }
 
@@ -62,9 +113,9 @@ public class SimulateSleep : MonoBehaviour
             SetFadeAlpha(alpha);
             yield return null;
         }
-        SetFadeAlpha(1f); // Ensure fully black
+        SetFadeAlpha(1f); // Asegurar negro completo
 
-        // Wait
+        // Esperar
         yield return new WaitForSeconds(3f);
 
         // Fade in
@@ -76,9 +127,9 @@ public class SimulateSleep : MonoBehaviour
             SetFadeAlpha(alpha);
             yield return null;
         }
-        SetFadeAlpha(0f); // Ensure fully transparent
+        SetFadeAlpha(0f); // Asegurar transparencia completa
 
-        // Switch back camera
+        // Volver a la cámara principal
         if (mainCamera != null && bedCamera != null)
         {
             mainCamera.gameObject.SetActive(true);
@@ -86,6 +137,20 @@ public class SimulateSleep : MonoBehaviour
         }
 
         isFading = false;
+        hasSlept = true; // Se ha completado el dormir
+        if (energyScript != null)
+        {
+            energyScript.RestoreEnergyFromSleep();
+        }
+
+        // Iniciar el cooldown para poder dormir de nuevo
+        StartCoroutine(EnableSleepAgain());
+    }
+
+    IEnumerator EnableSleepAgain()
+    {
+        yield return new WaitForSeconds(sleepCooldown);
+        canSleepAgain = true;
     }
 
     void SetFadeAlpha(float alpha)
@@ -98,7 +163,31 @@ public class SimulateSleep : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Fade Image not assigned!");
+            Debug.LogWarning("Imagen de fundido no asignada.");
         }
     }
+
+    void ShowSleepMessage(string message)
+    {
+        if (sleepMessageText != null)
+        {
+            sleepMessageText.text = message;
+            sleepMessageText.gameObject.SetActive(true);
+            StartCoroutine(HideSleepMessage());
+        }
+        else
+        {
+            Debug.LogWarning("Texto del mensaje de sueño no asignado.");
+        }
+    }
+
+    IEnumerator HideSleepMessage()
+    {
+        yield return new WaitForSeconds(messageDisplayTime);
+        if (sleepMessageText != null)
+        {
+            sleepMessageText.gameObject.SetActive(false);
+        }
+    }
+
 }
