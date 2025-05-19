@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - objetoInteractivo
+  - cama
   layers:
   - Default
   - TransparentFX
