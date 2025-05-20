@@ -7,54 +7,63 @@ public class WaterTank : MonoBehaviour
 {
     public int waterLevel = 100; // Nivel de agua inicial
     public int waterToCollect = 5; // Cantidad de agua a recoger
-    public TextMeshProUGUI waterLevelText; // Referencia al texto de la UI del nivel de agua
-    public TextMeshProUGUI interactionText; // Texto para mostrar "Presiona R para recoger agua"
-    public GameObject player; // Referencia al objeto del jugador ¡PÚBLICA!
-    public float interactionDistance = 5f; // Distancia máxima para interactuar
-    public TextMeshProUGUI mensajeAgua; // Referencia al texto para el mensaje de agua ¡PÚBLICA!
-    public ItemContainer playerInventory; // Referencia al inventario del jugador.  ¡Arrastrar desde el Inspector!
-    public string itemName = "Cubo de Agua"; // Nombre del item en el inventario
-    public Sprite waterCuboIcon; // Icono del cubo de agua. ¡Arrastrar desde el Inspector!
+
+    public TextMeshProUGUI waterLevelText; // Texto del nivel de agua del tanque
+    public TextMeshProUGUI interactionText; // Texto "Presiona R para recoger agua"
+    public TextMeshProUGUI mensajeAgua; // Mensaje temporal (ej. "Cubo de agua añadido")
+    public TextMeshProUGUI playerWaterText; // NUEVO: Texto en pantalla con agua acumulada
+    public Text playerstack; // NUEVO: Texto en pantalla con agua acumulada
+
+    public GameObject player; // Referencia al jugador
+    public float interactionDistance = 5f; // Distancia para interactuar
+
+    public ItemContainer playerInventory; // Inventario del jugador
+    public string itemName = "Cubo de Agua"; // Nombre del ítem
+    public Sprite waterCuboIcon; // Icono del ítem
 
     private bool playerInRange = false;
-    private int playerWater = 0; // Cantidad de agua que tiene el jugador
-    private bool hasCollectedWater = false; // Nuevo flag para verificar si se recogió agua
+    private int playerWater = 0; // Agua acumulada por el jugador
+    private bool hasCollectedWater = false;
 
     void Start()
     {
-        interactionText.gameObject.SetActive(false); // Oculta el texto al inicio
+        interactionText.gameObject.SetActive(false);
+        mensajeAgua.text = "";
         UpdateWaterLevelText();
+        UpdatePlayerWaterText(); // Inicializa el texto del agua acumulada
+
         if (player == null)
         {
-            Debug.LogError("No se ha asignado el objeto del jugador en el Inspector. Asegúrate de arrastrar el objeto del jugador al campo 'Player' del script WaterTank.");
+            Debug.LogError("No se ha asignado el objeto del jugador en el Inspector.");
         }
+
         if (playerInventory == null)
         {
-            Debug.LogError("No se ha asignado el ItemContainer del jugador en el Inspector. Asegúrate de arrastrar el objeto del inventario del jugador al campo 'Player Inventory' del script WaterTank.");
+            Debug.LogError("No se ha asignado el ItemContainer del jugador en el Inspector.");
         }
-        mensajeAgua.text = ""; // Inicializa el mensaje de agua
     }
 
     void Update()
     {
-        if (player != null) // Comprobamos que el jugador ha sido asignado
+        if (player != null)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position); //calculo de distancia
+            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
             if (distanceToPlayer <= interactionDistance)
             {
                 playerInRange = true;
                 interactionText.gameObject.SetActive(true);
                 UpdateWaterLevelText();
+
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    CollectWater(); // Llama a CollectWater al presionar R
+                    CollectWater();
                 }
             }
             else
             {
                 playerInRange = false;
                 interactionText.gameObject.SetActive(false);
-                mensajeAgua.text = ""; // Limpia el mensaje al salir
+                mensajeAgua.text = "";
             }
         }
     }
@@ -64,12 +73,13 @@ public class WaterTank : MonoBehaviour
         if (waterLevel >= waterToCollect)
         {
             waterLevel -= waterToCollect;
-            playerWater += waterToCollect; // Añade agua al jugador
+            playerWater += waterToCollect;
             UpdateWaterLevelText();
-            mensajeAgua.text = "Tienes " + playerWater + " de agua"; // Muestra el agua del jugador
+            UpdatePlayerWaterText(); // NUEVO: actualiza texto en pantalla
+            mensajeAgua.text = "Tienes " + playerWater + " de agua";
             Debug.Log("Agua recogida. Nivel de agua restante: " + waterLevel);
-            hasCollectedWater = true; // Actualiza el flag a verdadero
-            AddWaterToInventory(); // Añadimos el agua al inventario
+            hasCollectedWater = true;
+            AddWaterToInventory();
         }
         else
         {
@@ -85,40 +95,52 @@ public class WaterTank : MonoBehaviour
         }
     }
 
+    void UpdatePlayerWaterText() // NUEVO: muestra agua acumulada en la pantalla
+    {
+        if (playerWaterText != null)
+        {
+            playerWaterText.text = "Agua: " + playerWater;
+        }
+    }
+
+    void stacck()
+    {
+        playerstack.text = "" + playerWater + "";
+    }
+
     void AddWaterToInventory()
     {
-        if (playerInventory != null && hasCollectedWater) // Verifica si se recogió agua
+        if (playerInventory != null && hasCollectedWater)
         {
-            // Crear una instancia del objeto Item "Cubo de Agua"
             WaterItem waterItem = ScriptableObject.CreateInstance<WaterItem>();
-            waterItem.DisplayName = itemName;  // Nombre que se mostrará en el inventario
-            //waterItem.Description = "Un cubo lleno de agua fresca."; // Descripción del objeto
-            waterItem.Icon = waterCuboIcon;  // Usamos el icono asignado en el Inspector
-            waterItem.Stack = 1; // Cantidad inicial del objeto
+            waterItem.DisplayName = itemName;
+            waterItem.Icon = waterCuboIcon;
+            waterItem.Stack = 1;
 
-            // Añadir el objeto al inventario
             bool success = playerInventory.AddItem(waterItem);
 
             if (success)
             {
                 Debug.Log("Cubo de Agua añadido al inventario.");
-                mensajeAgua.text = "Cubo de Agua añadido al inventario."; // Actualizar el mensaje
+                mensajeAgua.text = "Cubo de Agua añadido al inventario.";
             }
             else
             {
                 Debug.LogWarning("No se pudo añadir Cubo de Agua al inventario.");
-                mensajeAgua.text = "No se pudo añadir Cubo de Agua."; // Actualizar el mensaje
+                mensajeAgua.text = "No se pudo añadir Cubo de Agua.";
             }
         }
         else if (playerInventory == null)
         {
             Debug.LogError("No se ha asignado el inventario del jugador en el Inspector.");
         }
-        // No se añade nada al inventario si no se ha recogido agua.
     }
 
     void MostrarMensajeAgua()
     {
-        mensajeAgua.text = "Tienes " + playerWater + " de agua"; // Muestra el agua del jugador
+        mensajeAgua.text = "Tienes " + playerWater + " de agua";
     }
+
+    
+
 }

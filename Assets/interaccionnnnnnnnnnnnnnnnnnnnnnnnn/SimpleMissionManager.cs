@@ -4,16 +4,16 @@ using TMPro;
 public class SimpleMissionManagerTMP : MonoBehaviour
 {
     public TextMeshProUGUI missionText;
+    public TextMeshProUGUI mensajeMision; // Nuevo texto para mostrar los mensajes de misión completada
     public Mision misionActual;
     public int experiencia = 0;
 
-    // Nueva clase para definir una misión
     public class Mision
     {
         public int id { get; set; }
         public string nombre { get; set; }
         public string descripcion { get; set; }
-        public float duracion { get; set; }  // Añadimos duración
+        public float duracion { get; set; }
         public int id_recompensa { get; set; }
         public string estado { get; set; }
 
@@ -24,16 +24,24 @@ public class SimpleMissionManagerTMP : MonoBehaviour
             this.descripcion = descripcion;
             this.duracion = duracion;
             this.id_recompensa = recompensa;
-            this.estado = "pendiente"; // Estado inicial
+            this.estado = "pendiente";
         }
     }
 
     void Start()
     {
-        // Lanza la primera misión después de 5 segundos
+        mensajeMision.text = ""; // Vaciar mensaje al inicio
         Invoke("LanzarMision1", 1f);
-        // Lanza la segunda misión después de 12 segundos
-        Invoke("LanzarMision2", 3f);
+        Invoke("LanzarMision2", 5f);
+        Invoke("LanzarMision3", 10f);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Ikeyed();
+        }
     }
 
     void LanzarMision1()
@@ -64,15 +72,25 @@ public class SimpleMissionManagerTMP : MonoBehaviour
         misionActual.estado = "activa";
     }
 
-    // Llamar esta función desde otro script cuando el jugador planta la semilla
+    void LanzarMision3()
+    {
+        misionActual = new Mision(
+            id: 3,
+            nombre: "Ver Inventario",
+            descripcion: "⛏ Pulsa I para ver el inventario.",
+            duracion: 0f,
+            recompensa: 5
+        );
+
+        missionText.text = misionActual.descripcion;
+        misionActual.estado = "activa";
+    }
+
     public void OnSeedPlanted()
     {
         if (misionActual != null && misionActual.estado == "activa" && misionActual.id == 1)
         {
-            misionActual.estado = "completada";
-            experiencia += misionActual.id_recompensa;
-            missionText.text = "";
-            Debug.Log("✅ Misión completada: " + misionActual.nombre + ". +" + misionActual.id_recompensa + " XP");
+            CompletarMision();
         }
     }
 
@@ -80,10 +98,29 @@ public class SimpleMissionManagerTMP : MonoBehaviour
     {
         if (misionActual != null && misionActual.estado == "activa" && misionActual.id == 2)
         {
-            misionActual.estado = "completada";
-            experiencia += misionActual.id_recompensa;
-            missionText.text = "";
-            Debug.Log("✅ Misión completada: " + misionActual.nombre + ". +" + misionActual.id_recompensa + " XP");
+            CompletarMision();
         }
+    }
+
+    public void Ikeyed()
+    {
+        if (misionActual != null && misionActual.estado == "activa" && misionActual.id == 3)
+        {
+            CompletarMision();
+        }
+    }
+
+    void CompletarMision()
+    {
+        misionActual.estado = "completada";
+        experiencia += misionActual.id_recompensa;
+        missionText.text = "";
+        mensajeMision.text = "✅ Misión completada: " + misionActual.nombre + " +" + misionActual.id_recompensa + " XP";
+        Invoke("LimpiarMensajeMision", 4f); // Quita el mensaje tras 4 segundos
+    }
+
+    void LimpiarMensajeMision()
+    {
+        mensajeMision.text = "";
     }
 }
