@@ -6,6 +6,7 @@ TagManager:
   tags:
   - objetoInteractivo
   - cama
+  - Fire
   layers:
   - Default
   - TransparentFX

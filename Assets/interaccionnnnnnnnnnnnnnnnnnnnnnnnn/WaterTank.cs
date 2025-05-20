@@ -114,7 +114,7 @@ public class WaterTank : MonoBehaviour
         {
             WaterItem waterItem = ScriptableObject.CreateInstance<WaterItem>();
             waterItem.DisplayName = itemName;
-            waterItem.Icon = waterCuboIcon;
+            waterItem.Icon = Resources.Load<Sprite>("Empty_Beer_Jug");
             waterItem.Stack = 1;
 
             bool success = playerInventory.AddItem(waterItem);
@@ -127,7 +127,7 @@ public class WaterTank : MonoBehaviour
             else
             {
                 Debug.LogWarning("No se pudo añadir Cubo de Agua al inventario.");
-                mensajeAgua.text = "No se pudo añadir Cubo de Agua.";
+                mensajeAgua.text = "Se ha agotado el agua. Puedes fabricar más.";
             }
         }
         else if (playerInventory == null)
