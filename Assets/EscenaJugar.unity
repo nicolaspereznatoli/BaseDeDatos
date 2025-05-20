@@ -10799,7 +10799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
-  m_Database: {fileID: 0}
+  m_Database: {fileID: 11400000, guid: 0049234d696d6d54cbdfa5d0775e5081, type: 2}
   m_ChildDatabases: []
   onDataLoaded:
     m_PersistentCalls:
