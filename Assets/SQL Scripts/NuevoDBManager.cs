@@ -3,12 +3,12 @@ using Mono.Data.Sqlite;
 using System.Data;
 using System.IO;
 
-using Unity.VisualScripting.Dependencies.Sqlite;
 using System;
+using TMPro;
 
 public class NuevoDBManager : MonoBehaviour
 {
-
+    public TextMeshProUGUI miTexto;
     private string dbPath;
 
     void Awake()
@@ -22,6 +22,7 @@ public class NuevoDBManager : MonoBehaviour
     {
         IDbConnection connection = new SqliteConnection(dbPath);
         connection.Open();
+        Debug.Log("queso");
         return connection;
     }
 
@@ -32,6 +33,7 @@ public class NuevoDBManager : MonoBehaviour
         InTripulante();
         INMaquina();
         InSuministros();
+        AumentarCantidadSuministroEnNave("Gasolina", 90);
     }
 
     private void INMaquina()
@@ -207,15 +209,23 @@ public class NuevoDBManager : MonoBehaviour
     }
 
     public void GenerarGasolina()
-    {
+    {Debug.Log("a");
 
         if (HaySuficientesSuministro("Chatarra", 3) == true)
         {
+            
             AumentarCantidadSuministroEnNave("Gasolina", 1);
 
         }
+        else
+        {
+            miTexto.text = "No tienes suficiente chatarra";
+
+            miTexto.text = "";
+        }
 
     }
+
 
     
 
@@ -228,6 +238,7 @@ public class NuevoDBManager : MonoBehaviour
 
     public void AumentarCantidadSuministroEnNave(string tipoSuministro, int cantidadExtra)
     {
+
         using (IDbConnection connection = OpenConnection())
         {
             IDbCommand cmd = connection.CreateCommand();
@@ -390,18 +401,21 @@ public class NuevoDBManager : MonoBehaviour
 
     public bool HaySuficientesSuministro(string tipo, int cantidad)
     {
+        Debug.Log("holakase0");
         using (IDbConnection connection = OpenConnection())
-        {
+        { Debug.Log("holakase1");
             IDbCommand cmd = connection.CreateCommand();
             cmd.CommandText = "SELECT Cantidad FROM SuministroNave WHERE TipoSuministro = @tipo";
             cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
 
-
+           
             //
             using (IDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
+                    Debug.Log("holakase2");
+
                     int cantidadActual = reader.GetInt32(0);
                     return cantidadActual >= cantidad;
                 }
