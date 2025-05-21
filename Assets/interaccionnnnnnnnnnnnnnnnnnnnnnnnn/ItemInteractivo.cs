@@ -1,21 +1,50 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+using TMPro;
+using Mono.Data.Sqlite;
+using System.Data;
+
 
 public class ItemInteractivo : MonoBehaviour
 {
     public Canvas canvasObjetivo;
+   
+    NuevoDBManager nuevoDBManager = new NuevoDBManager();
+
 
     public void activarObjeto()
     {
-        if (canvasObjetivo != null)
+        if (gameObject.name == "JuegoChatarra")
         {
-            StartCoroutine(MostrarCanvasConFlickeo());
+            SceneManager.LoadScene("SnakeGame");
+
         }
-        else
+        if (gameObject.name == "CuboRefineria")
         {
-            Debug.LogWarning("No se asignÛ un Canvas al objeto interactivo.");
+            Debug.Log("hola");
+           
+            
+                
+
+                GenerarGasolina();
+                Debug.Log("adios");
+            
+           
+
+
         }
+       // if (canvasObjetivo != null)
+       // {
+       //     StartCoroutine(MostrarCanvasConFlickeo());
+       // }
+       // else
+       // {
+       //     Debug.LogWarning("No se asignÔøΩ un Canvas al objeto interactivo.");
+       // }
     }
 
     private IEnumerator MostrarCanvasConFlickeo()
@@ -35,6 +64,70 @@ public class ItemInteractivo : MonoBehaviour
         }
 
         canvasObjetivo.gameObject.SetActive(false);
-        Debug.Log("Canvas desactivado despuÈs del flickeo");
+        Debug.Log("Canvas desactivado despuÔøΩs del flickeo");
+    }
+    public TextMeshProUGUI mensajeTexto;
+    private string dbPath => "URI=file:" + Application.persistentDataPath + "/NaveDB.db";
+
+    private IDbConnection OpenConnection()
+    {
+        IDbConnection connection = new SqliteConnection(dbPath);
+        connection.Open();
+        return connection;
+    }
+
+    /// <summary>
+    /// Llama esta funci√≥n para intentar generar gasolina
+    /// </summary>
+    public void GenerarGasolina()
+    {
+        if (TieneSuficiente("Chatarra", 3))
+        {
+            ModificarRecurso("Chatarra", -3);
+            ModificarRecurso("Gasolina", 1);
+            mensajeTexto.text = "Has generado 1 unidad de Gasolina";
+        }
+        else
+        {
+            mensajeTexto.text = "No tienes suficiente Chatarra para generar Gasolina";
+        }
+    }
+
+    /// <summary>
+    /// Verifica si hay suficiente cantidad de un recurso
+    /// </summary>
+    private bool TieneSuficiente(string tipo, int cantidadNecesaria)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT Cantidad FROM SuministroNave WHERE TipoSuministro = @tipo";
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+
+            using (IDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    int cantidadActual = reader.GetInt32(0);
+                    return cantidadActual >= cantidadNecesaria;
+                }
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Modifica la cantidad de un suministro (puede sumar o restar)
+    /// </summary>
+    private void ModificarRecurso(string tipo, int delta)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "UPDATE SuministroNave SET Cantidad = Cantidad + @delta WHERE TipoSuministro = @tipo";
+            cmd.Parameters.Add(new SqliteParameter("@delta", delta));
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+            cmd.ExecuteNonQuery();
+        }
     }
 }
