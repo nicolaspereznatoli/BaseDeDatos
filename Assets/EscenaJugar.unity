@@ -6340,8 +6340,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6399,7 +6399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 288, y: -69}
+  m_AnchoredPosition: {x: 981, y: -335}
   m_SizeDelta: {x: -172, y: -158}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &318312542
@@ -14744,7 +14744,7 @@ PrefabInstance:
     - target: {fileID: 1024170931344558574, guid: a82076b1ea290da478ca692272ac61b3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: c39cbe508807cee4283f8805d19d94fb, type: 3}
+      objectReference: {fileID: 21300000, guid: 2bad79c08c0dddd469e0aaab6ddaa39a, type: 3}
     - target: {fileID: 1055067972217445499, guid: a82076b1ea290da478ca692272ac61b3, type: 3}
       propertyPath: m_Name
       value: Stats Bar
@@ -14764,7 +14764,7 @@ PrefabInstance:
     - target: {fileID: 7398791363507471238, guid: a82076b1ea290da478ca692272ac61b3, type: 3}
       propertyPath: m_Texture
       value: 
-      objectReference: {fileID: 2800000, guid: c39cbe508807cee4283f8805d19d94fb, type: 3}
+      objectReference: {fileID: 2800000, guid: 2bad79c08c0dddd469e0aaab6ddaa39a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

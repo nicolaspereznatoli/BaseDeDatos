@@ -33,7 +33,7 @@ public class NuevoDBManager : MonoBehaviour
         InTripulante();
         INMaquina();
         InSuministros();
-        AumentarCantidadSuministroEnNave("Gasolina", 90);
+        AumentarCantidadSuministroEnNave("Gasolina", 1);
     }
 
     private void INMaquina()

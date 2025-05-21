@@ -12,7 +12,7 @@ public class barragasolina : MonoBehaviour
     public Image barraDeGasolinaImagen;
     public TMP_Text textoGasolina;
     public float gasolinaMaxima = 100f;
-    private float gasolinaActual = 0f;
+    private float gasolinaActual = 120f;
     public float perdidaDeGasolinaPorSegundo = 1f;
 
     private float tiempoGuardado = 0f;

@@ -14,5 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/JuegoChatarra/SnakeGame.unity
     guid: 64c6b7e60ffc50246a1a2addda557ca4
+  - enabled: 1
+    path: Assets/EscenaJugar.unity
+    guid: 92d3dd8de60d42648a0281bbf88988f7
   m_configObjects: {}
-
