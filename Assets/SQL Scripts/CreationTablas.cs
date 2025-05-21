@@ -19,7 +19,7 @@ public class CreationTablas : MonoBehaviour
         dbConnection.Open();
 
         CreateTabas();
-        InsertarDatosPrueba(); // <-- Aquí añadimos la llamada a la nueva función
+        //InsertarDatosPrueba(); // <-- Aquí añadimos la llamada a la nueva función
 
         dbConnection.Close();
     }
@@ -92,11 +92,9 @@ public class CreationTablas : MonoBehaviour
 
         CREATE TABLE IF NOT EXISTS Afecta (
             ID_Evento INTEGER,
-            ID_SuministroNave INTEGER,
             ID_Maquina INTEGER,
-            PRIMARY KEY (ID_Evento, ID_SuministroNave, ID_Maquina),
+            PRIMARY KEY (ID_Evento, ID_Maquina),
             FOREIGN KEY (ID_Evento) REFERENCES Evento(ID_Evento),
-            FOREIGN KEY (ID_SuministroNave) REFERENCES SuministroNave(ID_SuministroNave),
             FOREIGN KEY (ID_Maquina) REFERENCES Maquina(ID_Maquina)
         );
         ";
