@@ -2,7 +2,6 @@ using UnityEngine;
 using Mono.Data.Sqlite;
 using System.Data;
 using System.IO;
-using System.Collections;
 
 using System;
 using TMPro;
@@ -34,6 +33,7 @@ public class NuevoDBManager : MonoBehaviour
         InTripulante();
         INMaquina();
         InSuministros();
+        AumentarCantidadSuministroEnNave("Gasolina", 90);
     }
 
     private void INMaquina()
@@ -219,28 +219,24 @@ public class NuevoDBManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Mostrartexto());
+            miTexto.text = "No tienes suficiente chatarra";
+
+            miTexto.text = "";
         }
+
     }
+
 
     
-    IEnumerator Mostrartexto()
-    {
 
-        miTexto.text = "No tienes suficiente chatarra";
-        yield return new WaitForSeconds(2f);  // espera 2 segundos
-        miTexto.text = " ";
-    }
+    
 
 
+    //IN TERACCIÓN CON LABASE DEDATOS
 
+    //Aumentar y disminuir recursos
 
-
-        //IN TERACCIÓN CON LABASE DEDATOS
-
-        //Aumentar y disminuir recursos
-
-        public void AumentarCantidadSuministroEnNave(string tipoSuministro, int cantidadExtra)
+    public void AumentarCantidadSuministroEnNave(string tipoSuministro, int cantidadExtra)
     {
 
         using (IDbConnection connection = OpenConnection())

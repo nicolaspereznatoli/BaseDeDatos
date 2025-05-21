@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -76,6 +76,9 @@ public class ItemInteractivo : MonoBehaviour
         {
             ModificarRecurso("Chatarra", -3);
             ModificarRecurso("Gasolina", 1);
+            
+            FindObjectOfType<barragasolina>()?.CargarGasolina(); // <-- Actualiza la UI desde BD
+
             mensajeTexto.text = "Has generado 1 unidad de Gasolina";
         }
         else
@@ -131,3 +134,4 @@ public class ItemInteractivo : MonoBehaviour
         }
     }
 }
+

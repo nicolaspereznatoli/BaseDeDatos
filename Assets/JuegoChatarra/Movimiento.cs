@@ -21,7 +21,9 @@ public class Movimiento : MonoBehaviour
     private List<Vector3>PositionHistory = new List<Vector3>();
     void Start()
     {
-        
+            conseguirChatarra(1);
+
+
     }
     private string dbPath => "URI=file:" + Application.persistentDataPath + "/NaveDB.db";
 
@@ -31,9 +33,9 @@ public class Movimiento : MonoBehaviour
         connection.Open();
         return connection;
     }
-    void conseguirChatarra()
+    void conseguirChatarra(int a)
     {
-        ModificarRecurso("Chatarra", 1);
+        ModificarRecurso("Chatarra", a);
 
     }
 
@@ -89,7 +91,7 @@ public class Movimiento : MonoBehaviour
             Destroy(other.gameObject);
             SerpienteCrece();
             Chatarra++;
-            conseguirChatarra(); 
+            conseguirChatarra(1); 
 
         }
         if (other.gameObject.CompareTag("Body"))
