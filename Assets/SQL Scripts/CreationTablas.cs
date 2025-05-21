@@ -19,12 +19,13 @@ public class CreationTablas : MonoBehaviour
         dbConnection.Open();
 
         CreateTabas();
+        InsertarDatosPrueba(); // <-- Aquí añadimos la llamada a la nueva función
 
         dbConnection.Close();
-
     }
 
-    
+
+
 
     void CreateTabas()
     {
@@ -101,6 +102,24 @@ public class CreationTablas : MonoBehaviour
         ";
 
         command.ExecuteNonQuery();
+    }
+
+    void InsertarDatosPrueba()
+    {
+        using (IDbCommand command = dbConnection.CreateCommand())
+        {
+            // Inserta un tripulante de ejemplo
+            command.CommandText = @"
+            INSERT INTO Tripulante (Energia, Sed, Hambre) VALUES (56699, 50, 25);
+        ";
+            command.ExecuteNonQuery();
+
+            // Inserta una recompensa de ejemplo
+            command.CommandText = @"
+            INSERT INTO Recompensa (Tipo, Contenido) VALUES ('Pan', 10);
+        ";
+            command.ExecuteNonQuery();
+        }
     }
 
 

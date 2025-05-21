@@ -27,17 +27,17 @@ public class EventSystemManager : MonoBehaviour
 
     void AplicarEvento(Evento e)
     {
-        // Aquí modificarías valores reales del juego, por ejemplo:
-        if (e.suministroAfectado == "chatarra")
-        {
-            Inventario.instance.ModificarChatarra(e.impacto);
-        }
-        else if (e.suministroAfectado == "semillas")
-        {
-            Inventario.instance.ModificarSemillas(e.impacto);
-        }
+        //Aquí modificarías valores reales del juego, por ejemplo:
+        //if (e.suministroAfectado == "chatarra")
+        //{
+        //    Inventario.instance.ModificarChatarra(e.impacto);
+        //}
+        //else if (e.suministroAfectado == "semillas")
+        //{
+        //    Inventario.instance.ModificarSemillas(e.impacto);
+        //}
 
-        // Puedes disparar eventos visuales, UI, sonidos, etc.
+        //Puedes disparar eventos visuales, UI, sonidos, etc.
     }
 }
 
