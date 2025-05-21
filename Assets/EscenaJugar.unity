@@ -17042,7 +17042,7 @@ GameObject:
   - component: {fileID: 983780171}
   - component: {fileID: 983780170}
   m_Layer: 3
-  m_Name: JuegoChatarra
+  m_Name: Cuborefineria
   m_TagString: objetoInteractivo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31662,7 +31662,7 @@ GameObject:
   - component: {fileID: 1714623024}
   - component: {fileID: 1714623023}
   m_Layer: 3
-  m_Name: CuboRefineria (1)
+  m_Name: JuegoChatarra
   m_TagString: objetoInteractivo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

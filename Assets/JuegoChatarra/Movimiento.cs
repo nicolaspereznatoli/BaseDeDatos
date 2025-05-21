@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using Mono.Data.Sqlite;
+using System.Data;
+using System.IO;
 public class Movimiento : MonoBehaviour
 {
     int contador = 0;
@@ -21,7 +23,31 @@ public class Movimiento : MonoBehaviour
     {
         
     }
+    private string dbPath => "URI=file:" + Application.persistentDataPath + "/NaveDB.db";
 
+    private IDbConnection OpenConnection()
+    {
+        IDbConnection connection = new SqliteConnection(dbPath);
+        connection.Open();
+        return connection;
+    }
+    void conseguirChatarra()
+    {
+        ModificarRecurso("Chatarra", 1);
+
+    }
+
+    private void ModificarRecurso(string tipo, int delta)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "UPDATE SuministroNave SET Cantidad = Cantidad + @delta WHERE TipoSuministro = @tipo";
+            cmd.Parameters.Add(new SqliteParameter("@delta", delta));
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+            cmd.ExecuteNonQuery();
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -63,7 +89,8 @@ public class Movimiento : MonoBehaviour
             Destroy(other.gameObject);
             SerpienteCrece();
             Chatarra++;
-            nuevoDBManager.ConsigueChatarra(1); 
+            conseguirChatarra(); 
+
         }
         if (other.gameObject.CompareTag("Body"))
         {
@@ -76,6 +103,7 @@ public class Movimiento : MonoBehaviour
 
 
     }
+
     public void GameOver()
     {
         Debug.Log("Game Over");

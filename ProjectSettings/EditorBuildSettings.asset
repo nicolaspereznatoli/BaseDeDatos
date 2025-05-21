@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sci Fi Modular Pack/Scenes/Demo 1.0 Free.unity
     guid: 61c3fc2c1be344690b19efb0147d93ee
+  - enabled: 1
+    path: Assets/JuegoChatarra/SnakeGame.unity
+    guid: 64c6b7e60ffc50246a1a2addda557ca4
   m_configObjects: {}

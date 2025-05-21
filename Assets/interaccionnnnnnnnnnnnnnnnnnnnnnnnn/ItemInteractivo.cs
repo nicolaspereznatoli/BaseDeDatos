@@ -13,7 +13,6 @@ public class ItemInteractivo : MonoBehaviour
 {
     public Canvas canvasObjetivo;
    
-    NuevoDBManager nuevoDBManager = new NuevoDBManager();
 
 
     public void activarObjeto()
@@ -23,19 +22,11 @@ public class ItemInteractivo : MonoBehaviour
             SceneManager.LoadScene("SnakeGame");
 
         }
-        if (gameObject.name == "CuboRefineria")
+        if (gameObject.name == "Cuborefineria")
         {
             Debug.Log("hola");
-           
-            
-                
-
                 GenerarGasolina();
                 Debug.Log("adios");
-            
-           
-
-
         }
        // if (canvasObjetivo != null)
        // {
@@ -47,25 +38,25 @@ public class ItemInteractivo : MonoBehaviour
        // }
     }
 
-    private IEnumerator MostrarCanvasConFlickeo()
-    {
-        canvasObjetivo.gameObject.SetActive(true);
-        Debug.Log("Canvas activado");
-
-        yield return new WaitForSeconds(4.2f); // Tiempo visible normal antes de flickeo
-
-        // Flickeo
-        for (int i = 0; i < 4; i++)
-        {
-            canvasObjetivo.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
-            canvasObjetivo.gameObject.SetActive(true);
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        canvasObjetivo.gameObject.SetActive(false);
-        Debug.Log("Canvas desactivado despu�s del flickeo");
-    }
+    //private IEnumerator MostrarCanvasConFlickeo()
+    //{
+    //    canvasObjetivo.gameObject.SetActive(true);
+    //    Debug.Log("Canvas activado");
+    //
+    //    yield return new WaitForSeconds(4.2f); // Tiempo visible normal antes de flickeo
+    //
+    //    // Flickeo
+    //    for (int i = 0; i < 4; i++)
+    //    {
+    //        canvasObjetivo.gameObject.SetActive(false);
+    //        yield return new WaitForSeconds(0.1f);
+    //        canvasObjetivo.gameObject.SetActive(true);
+    //        yield return new WaitForSeconds(0.1f);
+    //    }
+    //
+    //    canvasObjetivo.gameObject.SetActive(false);
+    //    Debug.Log("Canvas desactivado despu�s del flickeo");
+    //}
     public TextMeshProUGUI mensajeTexto;
     private string dbPath => "URI=file:" + Application.persistentDataPath + "/NaveDB.db";
 
@@ -89,9 +80,18 @@ public class ItemInteractivo : MonoBehaviour
         }
         else
         {
-            mensajeTexto.text = "No tienes suficiente Chatarra para generar Gasolina";
+            StartCoroutine(Esperar());
         }
     }
+    public IEnumerator Esperar()
+    {
+        mensajeTexto.text = "No tienes suficiente Chatarra para generar Gasolina";
+
+        yield return new WaitForSeconds(5f); // espera de 2 segundos
+        mensajeTexto.text = "";
+
+    }
+
 
     /// <summary>
     /// Verifica si hay suficiente cantidad de un recurso

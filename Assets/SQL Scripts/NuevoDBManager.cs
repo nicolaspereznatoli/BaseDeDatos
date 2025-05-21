@@ -2,13 +2,14 @@ using UnityEngine;
 using Mono.Data.Sqlite;
 using System.Data;
 using System.IO;
+using System.Collections;
 
 using System;
 using TMPro;
 
 public class NuevoDBManager : MonoBehaviour
 {
-    public TextMeshPro miTexto;
+    public TextMeshProUGUI miTexto;
     private string dbPath;
 
     void Awake()
@@ -22,6 +23,7 @@ public class NuevoDBManager : MonoBehaviour
     {
         IDbConnection connection = new SqliteConnection(dbPath);
         connection.Open();
+        Debug.Log("queso");
         return connection;
     }
 
@@ -217,21 +219,28 @@ public class NuevoDBManager : MonoBehaviour
         }
         else
         {
-                miTexto.text = "No tienes suficiente chatarra";
+            StartCoroutine(Mostrartexto());
         }
-
     }
 
     
+    IEnumerator Mostrartexto()
+    {
 
-    
+        miTexto.text = "No tienes suficiente chatarra";
+        yield return new WaitForSeconds(2f);  // espera 2 segundos
+        miTexto.text = " ";
+    }
 
 
-    //IN TERACCIÓN CON LABASE DEDATOS
 
-    //Aumentar y disminuir recursos
 
-    public void AumentarCantidadSuministroEnNave(string tipoSuministro, int cantidadExtra)
+
+        //IN TERACCIÓN CON LABASE DEDATOS
+
+        //Aumentar y disminuir recursos
+
+        public void AumentarCantidadSuministroEnNave(string tipoSuministro, int cantidadExtra)
     {
 
         using (IDbConnection connection = OpenConnection())
