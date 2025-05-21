@@ -358,6 +358,33 @@ public class NuevoDBManager : MonoBehaviour
         }
     }
 
+    public int ObtenerIDSuministroPorTipo(string tipo)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT ID_SuministroNave FROM SuministroNave WHERE TipoSuministro = @tipo";
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+
+            object result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : -1;
+        }
+    }
+
+    public int InsertarEvento(string tipo, string descripcion)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "INSERT INTO Evento (Tipo, Descripcion) VALUES (@tipo, @desc)";
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+            cmd.Parameters.Add(new SqliteParameter("@desc", descripcion));
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "SELECT last_insert_rowid()";
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+    }
 
 
     //COMPROBACIÓN PARA INTERCAMBIO

@@ -4,40 +4,63 @@ using System.Collections.Generic;
 public class EventSystemManager : MonoBehaviour
 {
     public List<Evento> eventosPosibles;
+    private NuevoDBManager dbManager;
+
+    void Awake()
+    {
+        dbManager = FindObjectOfType<NuevoDBManager>();
+        if (dbManager == null)
+        {
+            Debug.LogError("No se encontró NuevoDBManager en la escena.");
+        }
+        else
+        {
+            Debug.Log("NuevoDBManager encontrado.");
+        }
+    }
 
     void Start()
     {
-        GenerarEventoAleatorio();
+        GenerarEventos();
     }
 
-    public void GenerarEventoAleatorio()
+    public void GenerarEventos()
     {
-        if (eventosPosibles.Count == 0) return;
+        if (eventosPosibles == null || eventosPosibles.Count == 0)
+        {
+            Debug.LogWarning("No hay eventos para generar.");
+            return;
+        }
 
-        int index = Random.Range(0, eventosPosibles.Count);
-        Evento eventoElegido = eventosPosibles[index];
+        foreach (Evento eventoElegido in eventosPosibles)
+        {
+            Debug.Log("Nuevo evento generado:");
+            Debug.Log($"Tipo: {eventoElegido.tipo}");
+            Debug.Log($"Descripción: {eventoElegido.descripcion}");
+            Debug.Log($"Afecta a: {eventoElegido.suministroAfectado} con impacto de {eventoElegido.impacto}");
 
-        Debug.Log("Nuevo evento generado:");
-        Debug.Log($"Tipo: {eventoElegido.tipo}");
-        Debug.Log($"Descripción: {eventoElegido.descripcion}");
-        Debug.Log($"Afecta a: {eventoElegido.suministroAfectado} con impacto de {eventoElegido.impacto}");
-
-        AplicarEvento(eventoElegido);
+            AplicarEvento(eventoElegido);
+        }
     }
 
     void AplicarEvento(Evento e)
     {
-        //Aquí modificarías valores reales del juego, por ejemplo:
-        //if (e.suministroAfectado == "chatarra")
-        //{
-        //    Inventario.instance.ModificarChatarra(e.impacto);
-        //}
-        //else if (e.suministroAfectado == "semillas")
-        //{
-        //    Inventario.instance.ModificarSemillas(e.impacto);
-        //}
+        // 1. Modificar los recursos en la nave según impacto
+        if (e.impacto != 0)
+        {
+            if (e.impacto > 0)
+                dbManager.AumentarCantidadSuministroEnNave(e.suministroAfectado, e.impacto);
+            else
+                dbManager.RestarCantidadSuministroEnNave(e.suministroAfectado, Mathf.Abs(e.impacto));
+        }
 
-        //Puedes disparar eventos visuales, UI, sonidos, etc.
+        // 2. Insertar el evento en la base de datos y obtener su ID
+        int idEvento = dbManager.InsertarEvento(e.tipo, e.descripcion);
+
+        // 3. Obtener el ID del suministro afectado
+        int idSuministro = dbManager.ObtenerIDSuministroPorTipo(e.suministroAfectado);
+
+        // 4. Insertar el registro de qué afecta el evento (no afecta máquina aquí)
+        dbManager.InsertarAfecta(idEvento, idSuministro, 0, false);
     }
 }
-
