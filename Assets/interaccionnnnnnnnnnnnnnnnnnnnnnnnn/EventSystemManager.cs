@@ -1,43 +1,76 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class EventSystemManager : MonoBehaviour
 {
     public List<Evento> eventosPosibles;
+    private NuevoDBManager dbManager;
+    public TextMeshProUGUI eventosTexto;
+
+    void Awake()
+    {
+        dbManager = FindObjectOfType<NuevoDBManager>();
+        if (dbManager == null)
+        {
+            Debug.LogError("No se encontró NuevoDBManager en la escena.");
+        }
+        else
+        {
+            Debug.Log("NuevoDBManager encontrado.");
+        }
+    }
 
     void Start()
     {
-        GenerarEventoAleatorio();
+        if (eventosPosibles != null && eventosPosibles.Count > 0)
+        {
+            StartCoroutine(MostrarEventosSecuencialmente());
+        }
+        else
+        {
+            Debug.LogWarning("No hay eventos para mostrar.");
+            eventosTexto.text = "No hay eventos disponibles.";
+        }
     }
 
-    public void GenerarEventoAleatorio()
+    IEnumerator MostrarEventosSecuencialmente()
     {
-        if (eventosPosibles.Count == 0) return;
+        foreach (Evento eventoElegido in eventosPosibles)
+        {
+            yield return new WaitForSeconds(3f);
 
-        int index = Random.Range(0, eventosPosibles.Count);
-        Evento eventoElegido = eventosPosibles[index];
+            // Mostrar "Nuevo evento sorpresa" en rojo
+            eventosTexto.text = "<color=red>Nuevo evento sorpresa</color>\n";
 
-        Debug.Log("Nuevo evento generado:");
-        Debug.Log($"Tipo: {eventoElegido.tipo}");
-        Debug.Log($"Descripción: {eventoElegido.descripcion}");
-        Debug.Log($"Afecta a: {eventoElegido.suministroAfectado} con impacto de {eventoElegido.impacto}");
+            // Esperar 1 segundo para efecto dramático
+            yield return new WaitForSeconds(3f);
 
-        AplicarEvento(eventoElegido);
+            // Mostrar nombre y descripción en color normal
+            eventosTexto.text = $"Evento: {eventoElegido.tipo}\nDescripción: {eventoElegido.descripcion}";
+
+            AplicarEvento(eventoElegido);
+
+            // Esperar 5 segundos antes del siguiente evento
+            yield return new WaitForSeconds(10f);
+        }
+
+        eventosTexto.text = "No hay más eventos";
     }
 
     void AplicarEvento(Evento e)
     {
-        //Aquí modificarías valores reales del juego, por ejemplo:
-        //if (e.suministroAfectado == "chatarra")
-        //{
-        //    Inventario.instance.ModificarChatarra(e.impacto);
-        //}
-        //else if (e.suministroAfectado == "semillas")
-        //{
-        //    Inventario.instance.ModificarSemillas(e.impacto);
-        //}
+        if (e.impacto != 0)
+        {
+            if (e.impacto > 0)
+                dbManager.AumentarCantidadSuministroEnNave(e.suministroAfectado, e.impacto);
+            else
+                dbManager.RestarCantidadSuministroEnNave(e.suministroAfectado, Mathf.Abs(e.impacto));
+        }
 
-        //Puedes disparar eventos visuales, UI, sonidos, etc.
+        int idEvento = dbManager.InsertarEvento(e.tipo, e.descripcion);
+        int idSuministro = dbManager.ObtenerIDSuministroPorTipo(e.suministroAfectado);
+        dbManager.InsertarAfecta(idEvento, 0, false);
     }
 }
-

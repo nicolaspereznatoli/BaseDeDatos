@@ -2299,7 +2299,7 @@ MonoBehaviour:
   interactionDistance: 3
   playerInventory: {fileID: 555426163}
   itemName: Cubo de Agua
-  waterCuboIcon: {fileID: 0}
+  waterCuboIcon: {fileID: 21300000, guid: ca905a609f2c5684cb722dca0f17fa1c, type: 3}
 --- !u!114 &127033897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4963,6 +4963,67 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227979743}
   m_Mesh: {fileID: 4300000, guid: 256ae929090684381b3f3ef6abc90a33, type: 3}
+--- !u!1 &236582477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 236582479}
+  - component: {fileID: 236582478}
+  m_Layer: 0
+  m_Name: eventos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &236582478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236582477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb13ab6de80e49479d3d951b04df357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventosPosibles:
+  - id: 1
+    tipo: "Da\xF1o"
+    descripcion: "Fuga de gas en motores. Se requieren 5 unidades de chatarra para
+      reparar o habr\xE1 da\xF1os en la nave."
+    tiempoLimite: 2000
+    suministroAfectado: Gas
+    impacto: 20
+    idMision: 3
+  - id: 2
+    tipo: Beneficio
+    descripcion: Descubierto compartimento oculto. +10 alimentos y materiales.
+    tiempoLimite: 2000
+    suministroAfectado: Comida
+    impacto: 20
+    idMision: 3
+  eventosTexto: {fileID: 316905613}
+--- !u!4 &236582479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236582477}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 968.566, y: 392.28888, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &259040497
 GameObject:
   m_ObjectHideFlags: 0
@@ -5622,14 +5683,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
       propertyPath: m_Name
-      value: scene (2)
+      value: semillla
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630182533373557982, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630182533373557982, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630182533373557982, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
     - {fileID: -8700617353114198275, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 645457061}
   m_SourcePrefab: {fileID: 100100000, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
 --- !u!1001 &297791170
 PrefabInstance:
@@ -6190,6 +6266,140 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310882747}
   m_Mesh: {fileID: 4300000, guid: bb01b9278a1b047a796cd1810d13fa84, type: 3}
+--- !u!1 &316905612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 316905615}
+  - component: {fileID: 316905614}
+  - component: {fileID: 316905613}
+  m_Layer: 5
+  m_Name: evento
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &316905613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316905612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: ' '
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 30.96
+  m_fontSizeBase: 30.96
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -282.36108, y: 0, z: 993.16406, w: 498.85956}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &316905614
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316905612}
+  m_CullTransparentMesh: 1
+--- !u!224 &316905615
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316905612}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1636014289}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 288, y: -69}
+  m_SizeDelta: {x: -172, y: -158}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &318312542
 GameObject:
   m_ObjectHideFlags: 0
@@ -11543,6 +11753,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643018508}
   m_Mesh: {fileID: 4300000, guid: 9b87c28772d3f44d8929187f7ca901e4, type: 3}
+--- !u!1 &645457059 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 555fe243e79081942bcf91186df5bcd1, type: 3}
+  m_PrefabInstance: {fileID: 292655323}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &645457061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645457059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a26d27a59b2976341a1ae32ecda0b2e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterLevel: 100
+  waterToCollect: 5
+  waterLevelText: {fileID: 0}
+  interactionText: {fileID: 0}
+  mensajeAgua: {fileID: 0}
+  playerWaterText: {fileID: 0}
+  playerstack: {fileID: 0}
+  player: {fileID: 0}
+  interactionDistance: 5
+  playerInventory: {fileID: 0}
+  itemName: Cubo de Agua
+  waterCuboIcon: {fileID: 21300000, guid: 4e91672c0a9122944b236cf1fa7a1e84, type: 3}
 --- !u!1 &647730407
 GameObject:
   m_ObjectHideFlags: 0
@@ -30434,6 +30673,7 @@ RectTransform:
   - {fileID: 1805787702}
   - {fileID: 144247691}
   - {fileID: 1138672469}
+  - {fileID: 316905615}
   - {fileID: 146234592}
   - {fileID: 1385233786}
   - {fileID: 1364347988}
@@ -40445,3 +40685,4 @@ SceneRoots:
   - {fileID: 596396868}
   - {fileID: 495665628}
   - {fileID: 2133013630}
+  - {fileID: 236582479}

@@ -331,15 +331,14 @@ public class NuevoDBManager : MonoBehaviour
 
     //para ser usado cuando surga un evento
 
-    public void InsertarAfecta(int idEvento, int idSuministroNave, int idMaquina, bool afectamaquina)
+    public void InsertarAfecta(int idEvento, int idMaquina, bool afectamaquina)
     {
         using (IDbConnection connection = OpenConnection())
         {
             IDbCommand cmd = connection.CreateCommand();
-            cmd.CommandText = "INSERT INTO Afecta (ID_Evento, ID_SuministroNave, ID_Maquina) " +
-                              "VALUES (@idEvento, @idSuministro, @idMaquina)";
+            cmd.CommandText = "INSERT INTO Afecta (ID_Evento, ID_Maquina) " +
+                              "VALUES (@idEvento, @idMaquina)";
             cmd.Parameters.Add(new SqliteParameter("@idEvento", idEvento));
-            cmd.Parameters.Add(new SqliteParameter("@idSuministro", idSuministroNave));
             cmd.Parameters.Add(new SqliteParameter("@idMaquina", idMaquina));
             cmd.ExecuteNonQuery();
 
@@ -364,6 +363,33 @@ public class NuevoDBManager : MonoBehaviour
         }
     }
 
+    public int ObtenerIDSuministroPorTipo(string tipo)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT ID_SuministroNave FROM SuministroNave WHERE TipoSuministro = @tipo";
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+
+            object result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : -1;
+        }
+    }
+
+    public int InsertarEvento(string tipo, string descripcion)
+    {
+        using (IDbConnection connection = OpenConnection())
+        {
+            IDbCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "INSERT INTO Evento (Tipo, Descripcion) VALUES (@tipo, @desc)";
+            cmd.Parameters.Add(new SqliteParameter("@tipo", tipo));
+            cmd.Parameters.Add(new SqliteParameter("@desc", descripcion));
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "SELECT last_insert_rowid()";
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+    }
 
 
     //COMPROBACIÓN PARA INTERCAMBIO
