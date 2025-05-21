@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class EventSystemManager : MonoBehaviour
 {
     public List<Evento> eventosPosibles;
     private NuevoDBManager dbManager;
+    public TextMeshProUGUI eventosTexto;
 
     void Awake()
     {
@@ -21,31 +24,43 @@ public class EventSystemManager : MonoBehaviour
 
     void Start()
     {
-        GenerarEventos();
+        if (eventosPosibles != null && eventosPosibles.Count > 0)
+        {
+            StartCoroutine(MostrarEventosSecuencialmente());
+        }
+        else
+        {
+            Debug.LogWarning("No hay eventos para mostrar.");
+            eventosTexto.text = "No hay eventos disponibles.";
+        }
     }
 
-    public void GenerarEventos()
+    IEnumerator MostrarEventosSecuencialmente()
     {
-        if (eventosPosibles == null || eventosPosibles.Count == 0)
-        {
-            Debug.LogWarning("No hay eventos para generar.");
-            return;
-        }
-
         foreach (Evento eventoElegido in eventosPosibles)
         {
-            Debug.Log("Nuevo evento generado:");
-            Debug.Log($"Tipo: {eventoElegido.tipo}");
-            Debug.Log($"Descripción: {eventoElegido.descripcion}");
-            Debug.Log($"Afecta a: {eventoElegido.suministroAfectado} con impacto de {eventoElegido.impacto}");
+            yield return new WaitForSeconds(3f);
+
+            // Mostrar "Nuevo evento sorpresa" en rojo
+            eventosTexto.text = "<color=red>Nuevo evento sorpresa</color>\n";
+
+            // Esperar 1 segundo para efecto dramático
+            yield return new WaitForSeconds(3f);
+
+            // Mostrar nombre y descripción en color normal
+            eventosTexto.text = $"Evento: {eventoElegido.tipo}\nDescripción: {eventoElegido.descripcion}";
 
             AplicarEvento(eventoElegido);
+
+            // Esperar 5 segundos antes del siguiente evento
+            yield return new WaitForSeconds(10f);
         }
+
+        eventosTexto.text = "No hay más eventos";
     }
 
     void AplicarEvento(Evento e)
     {
-        // 1. Modificar los recursos en la nave según impacto
         if (e.impacto != 0)
         {
             if (e.impacto > 0)
@@ -54,13 +69,8 @@ public class EventSystemManager : MonoBehaviour
                 dbManager.RestarCantidadSuministroEnNave(e.suministroAfectado, Mathf.Abs(e.impacto));
         }
 
-        // 2. Insertar el evento en la base de datos y obtener su ID
         int idEvento = dbManager.InsertarEvento(e.tipo, e.descripcion);
-
-        // 3. Obtener el ID del suministro afectado
         int idSuministro = dbManager.ObtenerIDSuministroPorTipo(e.suministroAfectado);
-
-        // 4. Insertar el registro de qué afecta el evento (no afecta máquina aquí)
-        dbManager.InsertarAfecta(idEvento, idSuministro, 0, false);
+        dbManager.InsertarAfecta(idEvento, 0, false);
     }
 }
