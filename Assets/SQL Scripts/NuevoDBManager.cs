@@ -13,7 +13,8 @@ public class NuevoDBManager : MonoBehaviour
 
     void Awake()
     {
-        string dbPath = "URI=file:" + Path.Combine(Application.persistentDataPath, "NaveDB.db");
+        dbPath = "URI=file:" + Path.Combine(Application.persistentDataPath, "NaveDB.db");
+        Debug.Log("Ruta de la base de datos: " + dbPath);
 
     }
 
