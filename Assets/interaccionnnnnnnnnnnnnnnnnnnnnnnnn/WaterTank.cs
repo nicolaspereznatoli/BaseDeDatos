@@ -10,7 +10,7 @@ public class WaterTank : MonoBehaviour
 
     public TextMeshProUGUI waterLevelText; // Texto del nivel de agua del tanque
     public TextMeshProUGUI interactionText; // Texto "Presiona R para recoger agua"
-    public TextMeshProUGUI mensajeAgua; // Mensaje temporal (ej. "Cubo de agua añadido")
+    public TextMeshProUGUI mensajeAgua; // Mensaje temporal (ej. "Cubo de agua aï¿½adido")
     public TextMeshProUGUI playerWaterText; // NUEVO: Texto en pantalla con agua acumulada
     public Text playerstack; // NUEVO: Texto en pantalla con agua acumulada
 
@@ -18,8 +18,8 @@ public class WaterTank : MonoBehaviour
     public float interactionDistance = 5f; // Distancia para interactuar
 
     public ItemContainer playerInventory; // Inventario del jugador
-    public string itemName = "Cubo de Agua"; // Nombre del ítem
-    public Sprite waterCuboIcon; // Icono del ítem
+    public string itemName = "Cubo de Agua"; // Nombre del ï¿½tem
+    public Sprite waterCuboIcon; // Icono del ï¿½tem
 
     private bool playerInRange = false;
     private int playerWater = 0; // Agua acumulada por el jugador
@@ -121,13 +121,13 @@ public class WaterTank : MonoBehaviour
 
             if (success)
             {
-                Debug.Log("Cubo de Agua añadido al inventario.");
-                mensajeAgua.text = "Cubo de Agua añadido al inventario.";
+                Debug.Log("Cubo de Agua aï¿½adido al inventario.");
+                mensajeAgua.text = "Cubo de Agua aï¿½adido al inventario.";
             }
             else
             {
-                Debug.LogWarning("No se pudo añadir Cubo de Agua al inventario.");
-                mensajeAgua.text = "Se ha agotado el agua. Puedes fabricar más.";
+                Debug.LogWarning("No se pudo aï¿½adir Cubo de Agua al inventario.");
+                mensajeAgua.text = "Se ha agotado el agua. Puedes fabricar mï¿½s.";
             }
         }
         else if (playerInventory == null)
