@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/EscenaMenu/MenuPrincipal.unity
     guid: f16c716b41f894a4fa4375b6bec98a76
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sci Fi Modular Pack/Scenes/Demo 1.0 Free.unity
     guid: 61c3fc2c1be344690b19efb0147d93ee
+  - enabled: 1
+    path: Assets/EscenaJugar.unity
+    guid: 92d3dd8de60d42648a0281bbf88988f7
   m_configObjects: {}
